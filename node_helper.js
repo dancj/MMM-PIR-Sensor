@@ -5,6 +5,9 @@
  *
  * By Paul-Vincent Roll http://paulvincentroll.com
  * MIT Licensed.
+ *
+ * modified for pine64 by dan t
+ *
  */
 
 const NodeHelper = require('node_helper');
@@ -22,10 +25,13 @@ module.exports = NodeHelper.create({
     }
     else if (this.config.relayPIN == false){
       // Check if hdmi output is already on
-      exec("/opt/vc/bin/tvservice -s").stdout.on('data', function(data) {
-        if (data.indexOf("0x120002") !== -1)
-          exec("/opt/vc/bin/tvservice --preferred && chvt 6 && chvt 7", null);
-      });
+      //exec("/opt/vc/bin/tvservice -s").stdout.on('data', function(data) {
+      //  if (data.indexOf("0x120002") !== -1)
+      //    exec("/opt/vc/bin/tvservice --preferred && chvt 6 && chvt 7", null);
+      //});
+
+      // PINE64 wake up	
+      exec("xset -display :0 dpms force on");
     }
   },
 
@@ -53,11 +59,11 @@ module.exports = NodeHelper.create({
       // exec("echo '" + this.config.sensorPIN.toString() + "' > /sys/class/gpio/export", null);
       // exec("echo 'in' > /sys/class/gpio/gpio" + this.config.sensorPIN.toString() + "/direction", null);
 
-      if (this.config.relayPIN) {
-        this.relay = new Gpio(this.config.relayPIN, 'out');
-        this.relay.writeSync(this.config.relayOnState);
-        exec("/opt/vc/bin/tvservice --preferred && chvt 6 && chvt 7", null);
-      }
+      //if (this.config.relayPIN) {
+      //  this.relay = new Gpio(this.config.relayPIN, 'out');
+      //  this.relay.writeSync(this.config.relayOnState);
+      //  exec("/opt/vc/bin/tvservice --preferred && chvt 6 && chvt 7", null);
+      //}
 
       //Detected movement
       this.pir.watch(function(err, value) {
